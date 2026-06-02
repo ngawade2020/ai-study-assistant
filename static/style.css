@@ -194,3 +194,20 @@ pre {
         transform: translateY(0);
     }
 }
+.upload-form {
+
+    margin-top: 15px;
+
+    display: flex;
+
+    gap: 10px;
+}
+
+.upload-form input {
+
+    background: white;
+
+    padding: 10px;
+
+    border-radius: 10px;
+}

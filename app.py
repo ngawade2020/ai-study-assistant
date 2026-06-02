@@ -1,6 +1,12 @@
 from flask import Flask, render_template, request
+import os
+import PyPDF2
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = "uploads"
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 chat_history = []
 
@@ -12,10 +18,8 @@ def generate_response(question):
 
         "python":
         """
-Python is a powerful and beginner-friendly programming language.
-
-It is widely used in:
-- AI/ML
+Python is a powerful programming language used in:
+- AI
 - Web Development
 - Automation
 - Data Science
@@ -23,24 +27,18 @@ It is widely used in:
 
         "ai":
         """
-Artificial Intelligence enables machines to simulate human intelligence.
+Artificial Intelligence allows machines to simulate human intelligence.
 
 Major AI fields:
 - Machine Learning
 - NLP
-- Computer Vision
 - Robotics
+- Computer Vision
         """,
 
         "flask":
         """
-Flask is a lightweight Python web framework.
-
-It is commonly used for:
-- APIs
-- AI apps
-- Dashboards
-- Web applications
+Flask is a lightweight Python web framework used for web applications.
         """
     }
 
@@ -49,14 +47,15 @@ It is commonly used for:
         if key in question:
             return responses[key]
 
-    return """
-I am still learning.
+    return "Interesting question! I am still learning."
 
-Try asking about:
-- Python
-- AI
-- Flask
-"""
+def summarize_text(text):
+
+    words = text.split()
+
+    summary = " ".join(words[:100])
+
+    return summary + "..."
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -65,14 +64,45 @@ def home():
 
     if request.method == "POST":
 
-        question = request.form["question"]
+        # Text Question
+        if "question" in request.form:
 
-        response = generate_response(question)
+            question = request.form["question"]
 
-        chat_history.append({
-            "question": question,
-            "response": response
-        })
+            response = generate_response(question)
+
+            chat_history.append({
+                "question": question,
+                "response": response
+            })
+
+        # PDF Upload
+        if "pdf_file" in request.files:
+
+            pdf_file = request.files["pdf_file"]
+
+            if pdf_file.filename != "":
+
+                filepath = os.path.join(
+                    app.config["UPLOAD_FOLDER"],
+                    pdf_file.filename
+                )
+
+                pdf_file.save(filepath)
+
+                pdf_reader = PyPDF2.PdfReader(filepath)
+
+                text = ""
+
+                for page in pdf_reader.pages:
+                    text += page.extract_text()
+
+                summary = summarize_text(text)
+
+                chat_history.append({
+                    "question": f"Uploaded PDF: {pdf_file.filename}",
+                    "response": f"Summary:\n\n{summary}"
+                })
 
     return render_template(
         "index.html",

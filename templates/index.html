@@ -44,16 +44,30 @@
 
             </div>
 
-            <form method="POST" class="input-area">
+            <form method="POST"
+                  class="input-area">
 
                 <input
                     type="text"
                     name="question"
-                    placeholder="Ask anything..."
-                    required>
+                    placeholder="Ask anything...">
 
                 <button type="submit">
                     Send
+                </button>
+
+            </form>
+
+            <form method="POST"
+                  enctype="multipart/form-data"
+                  class="upload-form">
+
+                <input type="file"
+                       name="pdf_file"
+                       accept=".pdf">
+
+                <button type="submit">
+                    Upload PDF
                 </button>
 
             </form>
