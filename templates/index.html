@@ -1,7 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>AI Study Assistant</title>
 
@@ -14,29 +19,82 @@
 
     <div class="app">
 
+        <!-- Sidebar -->
+
         <div class="sidebar">
 
-            <h2>AI Study Assistant</h2>
+            <div>
 
-            <p>Your personal AI learning companion.</p>
+                <h1 class="logo">AI Study Assistant</h1>
+
+                <p class="subtitle">
+                    Your personal AI learning companion
+                </p>
+
+            </div>
+
+            <div class="sidebar-footer">
+
+                <p>Built with Flask + Python</p>
+
+            </div>
 
         </div>
 
-        <div class="chat-container">
+        <!-- Main Chat Area -->
 
-            <div class="chat-box">
+        <div class="main-content">
 
-                {% for chat in chat_history %}
+            <!-- Top Bar -->
 
-                    <div class="message user-message">
+            <div class="topbar">
 
-                        {{ chat.question }}
+                <h2>AI Chat</h2>
+
+                <div class="status">
+                    ● Online
+                </div>
+
+            </div>
+
+            <!-- Chat Messages -->
+
+            <div class="chat-box" id="chat-box">
+
+                {% if chat_history|length == 0 %}
+
+                    <div class="welcome">
+
+                        <h1>Welcome 👋</h1>
+
+                        <p>
+                            Ask questions, upload PDFs,
+                            and learn smarter with AI.
+                        </p>
 
                     </div>
 
-                    <div class="message ai-message">
+                {% endif %}
 
-                        <pre>{{ chat.response }}</pre>
+                {% for chat in chat_history %}
+
+                    <div class="message-row user-row">
+
+                        <div class="message user-message">
+
+                            {{ chat.question }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="message-row ai-row">
+
+                        <div class="message ai-message">
+
+                            <pre>{{ chat.response }}</pre>
+
+                        </div>
 
                     </div>
 
@@ -44,37 +102,87 @@
 
             </div>
 
-            <form method="POST"
-                  class="input-area">
+            <!-- Chat Input -->
 
-                <input
-                    type="text"
-                    name="question"
-                    placeholder="Ask anything...">
+            <div class="bottom-section">
 
-                <button type="submit">
-                    Send
-                </button>
+                <form method="POST"
+                      class="chat-form"
+                      id="chat-form">
 
-            </form>
+                    <input
+                        type="text"
+                        name="question"
+                        placeholder="Ask anything..."
+                        autocomplete="off"
+                        required>
 
-            <form method="POST"
-                  enctype="multipart/form-data"
-                  class="upload-form">
+                    <button type="submit"
+                            id="send-button">
 
-                <input type="file"
-                       name="pdf_file"
-                       accept=".pdf">
+                        <span id="button-text">
+                            Send
+                        </span>
 
-                <button type="submit">
-                    Upload PDF
-                </button>
+                    </button>
 
-            </form>
+                </form>
+
+                <!-- PDF Upload -->
+
+                <form method="POST"
+                      enctype="multipart/form-data"
+                      class="upload-form">
+
+                    <label class="upload-label">
+
+                        Upload PDF
+
+                        <input
+                            type="file"
+                            name="pdf_file"
+                            accept=".pdf">
+
+                    </label>
+
+                    <button type="submit">
+                        Summarize
+                    </button>
+
+                </form>
+
+            </div>
 
         </div>
 
     </div>
+
+    <!-- Scripts -->
+
+    <script>
+
+        // Auto Scroll
+
+        const chatBox =
+            document.getElementById("chat-box");
+
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
+
+        // Loading Button
+
+        const form =
+            document.getElementById("chat-form");
+
+        form.addEventListener("submit", function () {
+
+            document.getElementById(
+                "button-text"
+            ).innerText = "Thinking...";
+
+        });
+
+    </script>
 
 </body>
 
