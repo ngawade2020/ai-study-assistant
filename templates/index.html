@@ -12,23 +12,51 @@
 
 <body>
 
-    <div class="container">
+    <div class="app">
 
-        <h1>AI Study Assistant</h1>
+        <div class="sidebar">
 
-        <form method="POST">
+            <h2>AI Study Assistant</h2>
 
-            <input type="text"
-                   name="question"
-                   placeholder="Ask something...">
+            <p>Your personal AI learning companion.</p>
 
-            <button type="submit">Ask AI</button>
+        </div>
 
-        </form>
+        <div class="chat-container">
 
-        <div class="response">
+            <div class="chat-box">
 
-            {{ response }}
+                {% for chat in chat_history %}
+
+                    <div class="message user-message">
+
+                        {{ chat.question }}
+
+                    </div>
+
+                    <div class="message ai-message">
+
+                        <pre>{{ chat.response }}</pre>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            <form method="POST" class="input-area">
+
+                <input
+                    type="text"
+                    name="question"
+                    placeholder="Ask anything..."
+                    required>
+
+                <button type="submit">
+                    Send
+                </button>
+
+            </form>
 
         </div>
 
