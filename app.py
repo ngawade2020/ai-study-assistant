@@ -1,12 +1,17 @@
 from flask import Flask, render_template, request
 import os
 import PyPDF2
+from datetime import datetime
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "uploads"
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+# Create uploads folder if not exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 chat_history = []
 
@@ -15,56 +20,48 @@ def generate_response(question):
 
     question = question.lower()
 
-    responses = {
+    if "python" in question:
 
-        "python":
-        """
-Python is a powerful programming language used in:
+        return """
+Python is a powerful programming language.
 
+Popular uses:
 • AI & Machine Learning
 • Web Development
 • Automation
 • Data Science
-• Backend Engineering
-        """,
+"""
 
-        "ai":
-        """
+    elif "ai" in question:
+
+        return """
 Artificial Intelligence enables machines to simulate human intelligence.
 
-Major AI fields include:
-
+Main AI fields:
 • Machine Learning
 • NLP
 • Robotics
 • Computer Vision
-        """,
+"""
 
-        "flask":
-        """
+    elif "flask" in question:
+
+        return """
 Flask is a lightweight Python web framework.
 
 Common uses:
-
-• AI Applications
+• AI Apps
 • APIs
 • Dashboards
 • Full-stack Web Apps
-        """
-    }
+"""
 
-    for key in responses:
+    return f"""
+You asked:
 
-        if key in question:
-            return responses[key]
+"{question}"
 
-    return """
-I am still learning.
-
-Try asking about:
-• Python
-• AI
-• Flask
+This is a simulated AI response.
 """
 
 
@@ -72,7 +69,7 @@ def summarize_text(text):
 
     words = text.split()
 
-    summary = " ".join(words[:120])
+    summary = " ".join(words[:150])
 
     return summary + "..."
 
@@ -84,58 +81,64 @@ def home():
 
     if request.method == "POST":
 
-        # Chat Questions
+        # Chat Message
 
-        if "question" in request.form:
+        question = request.form.get("question")
 
-            question = request.form["question"]
+        if question and question.strip() != "":
 
-            if question.strip() != "":
+            response = generate_response(question)
 
-                response = generate_response(question)
+            current_time = datetime.now().strftime("%H:%M")
 
-                chat_history.append({
-                    "question": question,
-                    "response": response
-                })
+            chat_history.append({
+
+                "question": question,
+
+                "response": response,
+
+                "time": current_time
+            })
 
         # PDF Upload
 
-        if "pdf_file" in request.files:
+        pdf_file = request.files.get("pdf_file")
 
-            pdf_file = request.files["pdf_file"]
+        if pdf_file and pdf_file.filename != "":
 
-            if pdf_file.filename != "":
+            filepath = os.path.join(
+                app.config["UPLOAD_FOLDER"],
+                pdf_file.filename
+            )
 
-                filepath = os.path.join(
-                    app.config["UPLOAD_FOLDER"],
-                    pdf_file.filename
-                )
+            pdf_file.save(filepath)
 
-                pdf_file.save(filepath)
+            pdf_reader = PyPDF2.PdfReader(filepath)
 
-                pdf_reader = PyPDF2.PdfReader(filepath)
+            text = ""
 
-                text = ""
+            for page in pdf_reader.pages:
 
-                for page in pdf_reader.pages:
+                extracted = page.extract_text()
 
-                    extracted = page.extract_text()
+                if extracted:
 
-                    if extracted:
+                    text += extracted
 
-                        text += extracted
+            summary = summarize_text(text)
 
-                summary = summarize_text(text)
+            current_time = datetime.now().strftime("%H:%M")
 
-                chat_history.append({
+            chat_history.append({
 
-                    "question":
-                    f"Uploaded PDF: {pdf_file.filename}",
+                "question":
+                f"Uploaded PDF: {pdf_file.filename}",
 
-                    "response":
-                    f"AI Summary:\n\n{summary}"
-                })
+                "response":
+                f"AI Summary:\n\n{summary}",
+
+                "time": current_time
+            })
 
     return render_template(
         "index.html",

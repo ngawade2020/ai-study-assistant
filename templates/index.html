@@ -21,31 +21,31 @@
 
         <!-- Sidebar -->
 
-        <div class="sidebar">
+        <aside class="sidebar">
 
-            <div>
+            <h1 class="logo">
+                AI Study Assistant
+            </h1>
 
-                <h1 class="logo">AI Study Assistant</h1>
+            <button class="new-chat-btn">
+                + New Chat
+            </button>
 
-                <p class="subtitle">
-                    Your personal AI learning companion
-                </p>
+            <div class="chat-history">
+
+                <div class="history-item active">
+                    Current Chat
+                </div>
 
             </div>
 
-            <div class="sidebar-footer">
+        </aside>
 
-                <p>Built with Flask + Python</p>
+        <!-- Main Area -->
 
-            </div>
+        <main class="main-content">
 
-        </div>
-
-        <!-- Main Chat Area -->
-
-        <div class="main-content">
-
-            <!-- Top Bar -->
+            <!-- Topbar -->
 
             <div class="topbar">
 
@@ -57,19 +57,21 @@
 
             </div>
 
-            <!-- Chat Messages -->
+            <!-- Chat -->
 
-            <div class="chat-box" id="chat-box">
+            <div class="chat-box"
+                 id="chat-box">
 
                 {% if chat_history|length == 0 %}
 
-                    <div class="welcome">
+                    <div class="empty-state">
 
-                        <h1>Welcome 👋</h1>
+                        <h1>
+                            How can I help you today?
+                        </h1>
 
                         <p>
-                            Ask questions, upload PDFs,
-                            and learn smarter with AI.
+                            Ask questions or upload PDFs.
                         </p>
 
                     </div>
@@ -78,21 +80,53 @@
 
                 {% for chat in chat_history %}
 
-                    <div class="message-row user-row">
+                    <!-- User -->
 
-                        <div class="message user-message">
+                    <div class="message-wrapper user-wrapper">
 
-                            {{ chat.question }}
+                        <div class="avatar user-avatar">
+                            U
+                        </div>
+
+                        <div class="message-content">
+
+                            <div class="message user-message">
+
+                                {{ chat.question }}
+
+                            </div>
+
+                            <div class="timestamp">
+
+                                {{ chat.time }}
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                    <div class="message-row ai-row">
+                    <!-- AI -->
 
-                        <div class="message ai-message">
+                    <div class="message-wrapper ai-wrapper">
 
-                            <pre>{{ chat.response }}</pre>
+                        <div class="avatar ai-avatar">
+                            AI
+                        </div>
+
+                        <div class="message-content">
+
+                            <div class="message ai-message">
+
+                                <pre>{{ chat.response }}</pre>
+
+                            </div>
+
+                            <div class="timestamp">
+
+                                {{ chat.time }}
+
+                            </div>
 
                         </div>
 
@@ -102,23 +136,31 @@
 
             </div>
 
-            <!-- Chat Input -->
+            <!-- Input Area -->
 
-            <div class="bottom-section">
+            <div class="bottom-container">
 
                 <form method="POST"
+                      enctype="multipart/form-data"
                       class="chat-form"
                       id="chat-form">
 
-                    <input
-                        type="text"
+                    <textarea
                         name="question"
-                        placeholder="Ask anything..."
-                        autocomplete="off"
-                        required>
+                        placeholder="Message AI Study Assistant..."
+                        rows="1"></textarea>
 
-                    <button type="submit"
-                            id="send-button">
+                    <label class="upload-btn">
+
+                        PDF
+
+                        <input type="file"
+                               name="pdf_file"
+                               accept=".pdf">
+
+                    </label>
+
+                    <button type="submit">
 
                         <span id="button-text">
                             Send
@@ -128,32 +170,9 @@
 
                 </form>
 
-                <!-- PDF Upload -->
-
-                <form method="POST"
-                      enctype="multipart/form-data"
-                      class="upload-form">
-
-                    <label class="upload-label">
-
-                        Upload PDF
-
-                        <input
-                            type="file"
-                            name="pdf_file"
-                            accept=".pdf">
-
-                    </label>
-
-                    <button type="submit">
-                        Summarize
-                    </button>
-
-                </form>
-
             </div>
 
-        </div>
+        </main>
 
     </div>
 
