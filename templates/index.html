@@ -41,7 +41,7 @@
 
         </aside>
 
-        <!-- Main Area -->
+        <!-- Main Content -->
 
         <main class="main-content">
 
@@ -57,7 +57,7 @@
 
             </div>
 
-            <!-- Chat -->
+            <!-- Chat Box -->
 
             <div class="chat-box"
                  id="chat-box">
@@ -80,9 +80,9 @@
 
                 {% for chat in chat_history %}
 
-                    <!-- User -->
+                    <!-- User Message -->
 
-                    <div class="message-wrapper user-wrapper">
+                    <div class="message-wrapper">
 
                         <div class="avatar user-avatar">
                             U
@@ -106,9 +106,9 @@
 
                     </div>
 
-                    <!-- AI -->
+                    <!-- AI Message -->
 
-                    <div class="message-wrapper ai-wrapper">
+                    <div class="message-wrapper">
 
                         <div class="avatar ai-avatar">
                             AI
@@ -136,12 +136,13 @@
 
             </div>
 
-            <!-- Input Area -->
+            <!-- Bottom Container -->
 
             <div class="bottom-container">
 
+                <!-- Chat Form -->
+
                 <form method="POST"
-                      enctype="multipart/form-data"
                       class="chat-form"
                       id="chat-form">
 
@@ -150,21 +151,36 @@
                         placeholder="Message AI Study Assistant..."
                         rows="1"></textarea>
 
-                    <label class="upload-btn">
-
-                        PDF
-
-                        <input type="file"
-                               name="pdf_file"
-                               accept=".pdf">
-
-                    </label>
-
                     <button type="submit">
 
                         <span id="button-text">
                             Send
                         </span>
+
+                    </button>
+
+                </form>
+
+                <!-- PDF Upload Form -->
+
+                <form method="POST"
+                      enctype="multipart/form-data"
+                      class="upload-form">
+
+                    <label class="upload-btn">
+
+                        Upload PDF
+
+                        <input type="file"
+                               name="pdf_file"
+                               accept=".pdf"
+                               required>
+
+                    </label>
+
+                    <button type="submit">
+
+                        Summarize
 
                     </button>
 
@@ -188,7 +204,7 @@
         chatBox.scrollTop =
             chatBox.scrollHeight;
 
-        // Loading Button
+        // Loading Effect
 
         const form =
             document.getElementById("chat-form");

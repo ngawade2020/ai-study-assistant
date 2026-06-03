@@ -247,15 +247,13 @@ pre {
     background: #111827;
 }
 
-/* Form */
+/* Chat Form */
 
 .chat-form {
 
     display: flex;
 
     gap: 10px;
-
-    align-items: center;
 }
 
 .chat-form textarea {
@@ -281,6 +279,11 @@ pre {
     min-height: 55px;
 }
 
+.chat-form textarea::placeholder {
+
+    color: #94a3b8;
+}
+
 .chat-form button {
 
     border: none;
@@ -296,24 +299,54 @@ pre {
     cursor: pointer;
 }
 
-/* Upload */
+/* Upload Form */
+
+.upload-form {
+
+    margin-top: 15px;
+
+    display: flex;
+
+    gap: 10px;
+}
 
 .upload-btn {
 
+    flex: 1;
+
     background: #1e293b;
 
-    padding: 16px;
+    padding: 14px;
 
     border-radius: 14px;
 
     cursor: pointer;
 
     color: #cbd5e1;
+
+    text-align: center;
 }
 
 .upload-btn input {
 
     display: none;
+}
+
+.upload-form button {
+
+    border: none;
+
+    border-radius: 14px;
+
+    padding: 14px 24px;
+
+    background: #22c55e;
+
+    color: black;
+
+    font-weight: bold;
+
+    cursor: pointer;
 }
 
 /* Scrollbar */
